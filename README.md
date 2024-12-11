@@ -9,3 +9,5 @@ This is a customized version of LuaJIT for LuaSTG Sub, which mainly includes the
 Limitations:
 
 * I am lazy, so updates may not be timely.
+
+Credit goes to https://github.com/Demonese for most of the LuaJIT modifications, and obviously Mike Pall for writing LuaJIT to start with.
