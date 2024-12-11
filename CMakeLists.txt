@@ -1,0 +1,50 @@
+# i can't be assed to write and/or maintain a proper cmake build script for luajit.
+
+cmake_minimum_required(VERSION 3.26)
+project(LuaJIT)
+
+set(LUAJIT_STATIC)
+set(LUAJIT_SHARED)
+
+if(WIN32)
+    set(LUAJIT_STATIC ${CMAKE_CURRENT_LIST_DIR}/src/lua51.lib)
+    set(LUAJIT_SHARED ${CMAKE_CURRENT_LIST_DIR}/src/lua51.dll)
+else()
+    set(LUAJIT_STATIC ${CMAKE_CURRENT_LIST_DIR}/src/libluajit.a)
+    set(LUAJIT_SHARED ${CMAKE_CURRENT_LIST_DIR}/src/libluajit.so)
+endif()
+
+if(MSVC)
+    add_custom_target(build_luajit
+        BYPRODUCTS
+            ${LUAJIT_SHARED}
+            ${LUAJIT_STATIC}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/
+        COMMAND ${CMAKE_CURRENT_LIST_DIR}/src/msvcbuild.bat
+        VERBATIM
+    )
+else()
+    add_custom_target(build_luajit
+        BYPRODUCTS
+            ${LUAJIT_SHARED}
+            ${LUAJIT_STATIC}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/
+        COMMAND make
+        VERBATIM
+    )
+endif()
+
+add_library(luajit SHARED IMPORTED GLOBAL)
+set_target_properties(luajit PROPERTIES
+    IMPORTED_LOCATION ${LUAJIT_SHARED}
+)
+target_include_directories(luajit INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/)
+add_dependencies(luajit build_luajit)
+
+add_library(luajit-static STATIC IMPORTED GLOBAL)
+set_target_properties(luajit-static PROPERTIES
+    IMPORTED_LOCATION ${LUAJIT_STATIC}
+)
+target_include_directories(luajit-static INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/)
+add_dependencies(luajit-static build_luajit)
+

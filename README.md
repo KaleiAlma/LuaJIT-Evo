@@ -1,7 +1,7 @@
 # LuaJIT for LuaSTG Evo
 
 This is a customized version of LuaJIT for LuaSTG Sub, which mainly includes the following modifications:
-* Added CMake support
+* Added CMake support (not really)
 * `io`, `os` libraries now support `utf-8` encoding
 * Ported `utf8` from Lua 5.4
 * Ported `string.pack` and `string.unpack` from Lua 5.4

@@ -9,3 +9,8 @@
 *.dmp
 *.swp
 .tags
+
+/.cache*
+
+/build*
+/cmake-build*
