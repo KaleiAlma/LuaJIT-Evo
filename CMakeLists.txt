@@ -3,15 +3,11 @@
 cmake_minimum_required(VERSION 3.26)
 project(LuaJIT)
 
-set(LUAJIT_STATIC)
-set(LUAJIT_SHARED)
-
+set(LUAJIT_STATIC ${CMAKE_CURRENT_LIST_DIR}/src/libluajit.a)
+set(LUAJIT_SHARED ${CMAKE_CURRENT_LIST_DIR}/src/libluajit.so)
 if(WIN32)
     set(LUAJIT_STATIC ${CMAKE_CURRENT_LIST_DIR}/src/lua51.lib)
     set(LUAJIT_SHARED ${CMAKE_CURRENT_LIST_DIR}/src/lua51.dll)
-else()
-    set(LUAJIT_STATIC ${CMAKE_CURRENT_LIST_DIR}/src/libluajit.a)
-    set(LUAJIT_SHARED ${CMAKE_CURRENT_LIST_DIR}/src/libluajit.so)
 endif()
 
 if(MSVC)
@@ -21,6 +17,16 @@ if(MSVC)
             ${LUAJIT_STATIC}
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/
         COMMAND ${CMAKE_CURRENT_LIST_DIR}/src/msvcbuild.bat
+        VERBATIM
+    )
+elseif(APPLE)
+    add_custom_target(build_luajit
+        BYPRODUCTS
+            ${LUAJIT_SHARED}
+            ${LUAJIT_STATIC}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/
+        COMMAND export MACOSX_DEPLOYMENT_TARGET=10.15
+        COMMAND make
         VERBATIM
     )
 else()
