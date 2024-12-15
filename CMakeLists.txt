@@ -59,7 +59,7 @@ elseif(APPLE)
             ${LUAJIT_STATIC}
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/
         COMMAND export MACOSX_DEPLOYMENT_TARGET=10.15
-        COMMAND make $<$<BOOL:${CMAKE_CROSSCOMPILING}>:TARGET_CFLAGS="--target=${CMAKE_C_COMPILER_TARGET}" TARGET_LDFLAGS="-fuse-ld=lld">
+        COMMAND make $<$<BOOL:${CMAKE_CROSSCOMPILING}>:[[TARGET_CFLAGS="--target=${CMAKE_C_COMPILER_TARGET}" TARGET_LDFLAGS="-fuse-ld=lld"]]>
         VERBATIM
     )
 else()
@@ -68,7 +68,7 @@ else()
             ${LUAJIT_SHARED}
             ${LUAJIT_STATIC}
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/
-        COMMAND make $<$<BOOL:${CMAKE_CROSSCOMPILING}>:TARGET_CFLAGS="--target=${CMAKE_C_COMPILER_TARGET}" TARGET_LDFLAGS="-fuse-ld=lld">
+        COMMAND make $<$<BOOL:${CMAKE_CROSSCOMPILING}>:[[TARGET_CFLAGS="--target=${CMAKE_C_COMPILER_TARGET}" TARGET_LDFLAGS="-fuse-ld=lld"]]>
         VERBATIM
     )
 endif()
