@@ -63,19 +63,12 @@ elseif(APPLE)
         VERBATIM
     )
 else()
-    execute_process(
-        COMMAND find /usr/bin -name "ld.lld*"
-        OUTPUT_VARIABLE LLD_COMMAND
-    )
-
-    string(STRIP ${LLD_COMMAND} LLD_COMMAND)
-
     add_custom_target(build_luajit
         BYPRODUCTS
             ${LUAJIT_SHARED}
             ${LUAJIT_STATIC}
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/
-        COMMAND make $<$<BOOL:${CMAKE_CROSSCOMPILING}>:TARGET_FLAGS="--target=${CMAKE_C_COMPILER_TARGET}"> $<$<BOOL:${CMAKE_CROSSCOMPILING}>:TARGET_LD="${LLD_COMMAND}">
+        COMMAND make $<$<BOOL:${CMAKE_CROSSCOMPILING}>:TARGET_FLAGS="--target=${CMAKE_C_COMPILER_TARGET}"> $<$<BOOL:${CMAKE_CROSSCOMPILING}>:TARGET_LD="ld.lld">
         VERBATIM
     )
 endif()
