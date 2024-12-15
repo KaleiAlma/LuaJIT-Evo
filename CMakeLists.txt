@@ -68,7 +68,7 @@ else()
             ${LUAJIT_SHARED}
             ${LUAJIT_STATIC}
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/
-        COMMAND make $<$<BOOL:${CMAKE_CROSSCOMPILING}>:TARGET_FLAGS="--target=${CMAKE_C_COMPILER_TARGET} -fuse-ld=lld">
+        COMMAND make $<$<BOOL:${CMAKE_CROSSCOMPILING}>:TARGET_FLAGS="-v --target=${CMAKE_C_COMPILER_TARGET} -fuse-ld=lld">
         VERBATIM
     )
 endif()
