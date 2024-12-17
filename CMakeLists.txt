@@ -68,7 +68,7 @@ else()
     )
 endif()
 
-set(LUAJIT_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1/)
+set(LUAJIT_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/)
 
 add_library(luajit SHARED IMPORTED GLOBAL)
 set_target_properties(luajit PROPERTIES
