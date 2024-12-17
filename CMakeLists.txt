@@ -34,10 +34,10 @@ if(MSVC)
             ${LUAJIT_STATIC}
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/
         COMMAND ${CMAKE_CURRENT_LIST_DIR}/src/msvcbuild.bat amalg "" "${LSTG_EXTERNAL_COMPILE_OPTS_WIN}"
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/luajit/include/luajit-2.1
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/luajit/lib
-        COMMAND ${CMAKE_COMMAND} -E copy ${LUAJIT_INCLUDE} ${CMAKE_BINARY_DIR}/luajit/include/luajit-2.1/
-        COMMAND ${CMAKE_COMMAND} -E copy ${LUAJIT_LIB} ${CMAKE_BINARY_DIR}/luajit/lib/
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib
+        COMMAND ${CMAKE_COMMAND} -E copy ${LUAJIT_INCLUDE} ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1/
+        COMMAND ${CMAKE_COMMAND} -E copy ${LUAJIT_LIB} ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib/
         COMMAND_EXPAND_LISTS
         VERBATIM
     )
@@ -72,12 +72,12 @@ add_library(luajit SHARED IMPORTED GLOBAL)
 set_target_properties(luajit PROPERTIES
     IMPORTED_LOCATION ${LUAJIT_SHARED}
 )
-target_include_directories(luajit INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/)
+target_include_directories(luajit INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1/)
 add_dependencies(luajit build_luajit)
 
 add_library(luajit-static STATIC IMPORTED GLOBAL)
 set_target_properties(luajit-static PROPERTIES
     IMPORTED_LOCATION ${LUAJIT_STATIC}
 )
-target_include_directories(luajit-static INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/)
+target_include_directories(luajit-static INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1/)
 add_dependencies(luajit-static build_luajit)
