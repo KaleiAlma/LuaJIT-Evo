@@ -18,14 +18,17 @@ if(WIN32)
     )
 endif()
 
-set(LUAJIT_INCLUDE
-    ${CMAKE_CURRENT_LIST_DIR}/src/lua.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/lualib.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/lauxlib.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/luaconf.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/lua.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/luajit.h
+set(LUAJIT_HEADERS
+    lua.h
+    lualib.h
+    lauxlib.h
+    luaconf.h
+    lua.hpp
+    luajit.h
 )
+
+list(TRANSFORM LUAJIT_HEADERS PREPEND ${CMAKE_CURRENT_LIST_DIR}/src/ OUTPUT_VARIABLE LUAJIT_INCLUDE_SRC)
+list(TRANSFORM LUAJIT_HEADERS PREPEND ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1/ OUTPUT_VARIABLE LUAJIT_PUBLIC_HEADERS)
 
 if(MSVC)
     add_custom_target(build_luajit
@@ -36,7 +39,7 @@ if(MSVC)
         COMMAND ${CMAKE_CURRENT_LIST_DIR}/src/msvcbuild.bat amalg "" "${LSTG_EXTERNAL_COMPILE_OPTS_WIN}"
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib
-        COMMAND ${CMAKE_COMMAND} -E copy ${LUAJIT_INCLUDE} ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1/
+        COMMAND ${CMAKE_COMMAND} -E copy ${LUAJIT_INCLUDE_SRC} ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1/
         COMMAND ${CMAKE_COMMAND} -E copy ${LUAJIT_LIB} ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib/
         COMMAND_EXPAND_LISTS
         VERBATIM
@@ -73,6 +76,7 @@ set(LUAJIT_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/)
 add_library(luajit SHARED IMPORTED GLOBAL)
 set_target_properties(luajit PROPERTIES
     IMPORTED_LOCATION ${LUAJIT_SHARED}
+    PUBLIC_HEADER "${LUAJIT_PUBLIC_HEADERS}"
 )
 target_include_directories(luajit INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1/)
 add_dependencies(luajit build_luajit)
@@ -80,6 +84,7 @@ add_dependencies(luajit build_luajit)
 add_library(luajit-static STATIC IMPORTED GLOBAL)
 set_target_properties(luajit-static PROPERTIES
     IMPORTED_LOCATION ${LUAJIT_STATIC}
+    PUBLIC_HEADER "${LUAJIT_PUBLIC_HEADERS}"
 )
 target_include_directories(luajit-static INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1/)
 add_dependencies(luajit-static build_luajit)
