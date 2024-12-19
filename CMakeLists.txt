@@ -3,8 +3,8 @@
 cmake_minimum_required(VERSION 3.26)
 project(LuaJIT)
 
-set(LUAJIT_STATIC ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib/libluajit-5.1.a)
-set(LUAJIT_SHARED ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib/libluajit-5.1.so)
+set(LUAJIT_STATIC ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib/libluajit.a)
+set(LUAJIT_SHARED ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib/libluajit.so)
 set(LUAJIT_LIB
     ${CMAKE_CURRENT_LIST_DIR}/src/libluajit.a
     ${CMAKE_CURRENT_LIST_DIR}/src/libluajit.so
@@ -78,7 +78,7 @@ set_target_properties(luajit PROPERTIES
     IMPORTED_LOCATION ${LUAJIT_SHARED}
     PUBLIC_HEADER "${LUAJIT_PUBLIC_HEADERS}"
 )
-target_include_directories(luajit INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1/)
+target_include_directories(luajit INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/luajit>)
 add_dependencies(luajit build_luajit)
 
 add_library(luajit-static STATIC IMPORTED GLOBAL)
@@ -86,5 +86,10 @@ set_target_properties(luajit-static PROPERTIES
     IMPORTED_LOCATION ${LUAJIT_STATIC}
     PUBLIC_HEADER "${LUAJIT_PUBLIC_HEADERS}"
 )
-target_include_directories(luajit-static INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1/)
+target_include_directories(luajit-static INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/luajit>)
 add_dependencies(luajit-static build_luajit)
+
+install(
+    FILES ${LUAJIT_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/include
+    FILES ${LUAJIT_STATIC} ${LUAJIT_SHARED} DESTINATION ${CMAKE_INSTALL_LIBDIR}/lib
+)
