@@ -89,7 +89,11 @@ set_target_properties(luajit-static PROPERTIES
 target_include_directories(luajit-static INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/luajit>)
 add_dependencies(luajit-static build_luajit)
 
+include(GNUInstallDirs)
+
 install(
-    FILES ${LUAJIT_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/include
-    FILES ${LUAJIT_STATIC} ${LUAJIT_SHARED} DESTINATION ${CMAKE_INSTALL_LIBDIR}/lib
+    FILES ${LUAJIT_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/luajit
+)
+install(
+    FILES ${LUAJIT_STATIC} ${LUAJIT_SHARED} DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
