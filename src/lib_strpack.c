@@ -8,6 +8,7 @@
 #define LUA_LIB
 
 #include <string.h>
+#include <limits.h>
 
 #include "lua.h"
 #include "lauxlib.h"
