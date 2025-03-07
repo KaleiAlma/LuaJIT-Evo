@@ -74,6 +74,10 @@
 #include "lj_gdbjit.c"
 #include "lj_alloc.c"
 
+#ifdef _WIN32
+#include "lj_win32.c"
+#endif
+
 #include "lib_aux.c"
 #include "lib_base.c"
 #include "lib_math.c"
