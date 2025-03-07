@@ -75,18 +75,6 @@ endif()
 set(LUAJIT_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1/)
 make_directory(${LUAJIT_INCLUDE_DIR})
 
-add_library(luajit SHARED IMPORTED GLOBAL)
-set_target_properties(luajit PROPERTIES
-    IMPORTED_LOCATION ${LUAJIT_SHARED}
-    PUBLIC_HEADER "${LUAJIT_PUBLIC_HEADERS}"
-)
-target_include_directories(luajit
-    INTERFACE
-    $<BUILD_INTERFACE:${LUAJIT_INCLUDE_DIR}>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/luajit>
-)
-add_dependencies(luajit build_luajit)
-
 add_library(luajit-static STATIC IMPORTED GLOBAL)
 set_target_properties(luajit-static PROPERTIES
     IMPORTED_LOCATION ${LUAJIT_STATIC}
@@ -105,5 +93,5 @@ install(
     FILES ${LUAJIT_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/luajit
 )
 install(
-    FILES ${LUAJIT_STATIC} ${LUAJIT_SHARED} DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    FILES ${LUAJIT_STATIC} DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
