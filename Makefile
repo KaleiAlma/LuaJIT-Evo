@@ -135,24 +135,21 @@ install: $(INSTALL_DEP)
 	$(MKDIR) $(INSTALL_DIRS)
 	cd src && $(INSTALL_X) $(FILE_T) $(INSTALL_T)
 	cd src && test -f $(FILE_A) && $(INSTALL_F) $(FILE_A) $(INSTALL_STATIC) || :
-	$(RM) $(INSTALL_DYN) $(INSTALL_SONAME) # $(INSTALL_SHORT1) $(INSTALL_SHORT2)
+	$(RM) $(INSTALL_DYN) $(INSTALL_SONAME)
 	cd src && test -f $(FILE_SO) && \
 	  $(INSTALL_X) $(FILE_SO) $(INSTALL_DYN) && \
 	  ( $(LDCONFIG) $(INSTALL_LIB) || : ) #&& \
-	#   $(SYMLINK) $(INSTALL_SONAME) $(INSTALL_SHORT1) && \
-	#   $(SYMLINK) $(INSTALL_SONAME) $(INSTALL_SHORT2) || :
 	cd etc && $(INSTALL_F) $(FILE_MAN) $(INSTALL_MAN)
 	cd etc && $(SED_PC) $(FILE_PC) > $(FILE_PC).tmp && \
 	  $(INSTALL_F) $(FILE_PC).tmp $(INSTALL_PC) && \
 	  $(RM) $(FILE_PC).tmp
 	cd src && $(INSTALL_F) $(FILES_INC) $(INSTALL_INC)
 	cd src/jit && $(INSTALL_F) $(FILES_JITLIB) $(INSTALL_JITLIB)
-	$(SYMLINK) $(INSTALL_TNAME)
 	@echo "==== Successfully installed LuaJIT $(VERSION) to $(PREFIX) ===="
 
 uninstall:
 	@echo "==== Uninstalling LuaJIT $(VERSION) from $(PREFIX) ===="
-	$(UNINSTALL) $(INSTALL_T) $(INSTALL_STATIC) $(INSTALL_DYN) $(INSTALL_SHORT1) $(INSTALL_SHORT2) $(INSTALL_MAN)/$(FILE_MAN) $(INSTALL_PC)
+	$(UNINSTALL) $(INSTALL_T) $(INSTALL_STATIC) $(INSTALL_DYN) $(INSTALL_MAN)/$(FILE_MAN) $(INSTALL_PC)
 	for file in $(FILES_JITLIB); do \
 	  $(UNINSTALL) $(INSTALL_JITLIB)/$$file; \
 	  done
