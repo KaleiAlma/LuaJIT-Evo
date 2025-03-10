@@ -145,7 +145,6 @@ install: $(INSTALL_DEP)
 	  $(RM) $(FILE_PC).tmp
 	cd src && $(INSTALL_F) $(FILES_INC) $(INSTALL_INC)
 	cd src/jit && $(INSTALL_F) $(FILES_JITLIB) $(INSTALL_JITLIB)
-	$(SYMLINK) $(INSTALL_TNAME)
 	@echo "==== Successfully installed LuaJIT $(VERSION) to $(PREFIX) ===="
 
 uninstall:
