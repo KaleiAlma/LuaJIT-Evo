@@ -9,7 +9,7 @@ set(LUAJIT_LIB
     ${CMAKE_CURRENT_LIST_DIR}/src/libluajit.a
     ${CMAKE_CURRENT_LIST_DIR}/src/libluajit.so
 )
-set(LUAJIT_EXE ${CMAKE_CURRENT_BINARY_DIR}/luajit/bin/luajit)
+set(LUAJIT_EXE ${CMAKE_CURRENT_LIST_DIR}/luajit/bin/luajit)
 if(WIN32)
     set(LUAJIT_STATIC ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib/lua51.lib)
     set(LUAJIT_SHARED ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib/lua51.dll)
@@ -17,7 +17,7 @@ if(WIN32)
         ${CMAKE_CURRENT_LIST_DIR}/src/lua51.lib
         ${CMAKE_CURRENT_LIST_DIR}/src/lua51.dll
     )
-    set(LUAJIT_EXE ${CMAKE_CURRENT_BINARY_DIR}/luajit/bin/luajit.exe)
+    set(LUAJIT_EXE ${CMAKE_CURRENT_LIST_DIR}/luajit/bin/luajit.exe)
 endif()
 
 set(LUAJIT_HEADERS
