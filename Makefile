@@ -135,7 +135,7 @@ install: $(INSTALL_DEP)
 	$(MKDIR) $(INSTALL_DIRS)
 	cd src && $(INSTALL_X) $(FILE_T) $(INSTALL_T)
 	cd src && test -f $(FILE_A) && $(INSTALL_F) $(FILE_A) $(INSTALL_STATIC) || :
-	$(RM) $(INSTALL_DYN) $(INSTALL_SONAME) # $(INSTALL_SHORT1) $(INSTALL_SHORT2)
+	$(RM) $(INSTALL_DYN) $(INSTALL_SONAME)
 	cd src && test -f $(FILE_SO) && \
 	  $(INSTALL_X) $(FILE_SO) $(INSTALL_DYN) && \
 	  ( $(LDCONFIG) $(INSTALL_LIB) || : )
