@@ -41,6 +41,7 @@ if(WIN32)
         COMMAND ${CMAKE_CURRENT_LIST_DIR}/src/msvcbuild.bat amalg "" "${LSTG_EXTERNAL_COMPILE_OPTS_WIN}"
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/luajit/bin
         COMMAND ${CMAKE_COMMAND} -E copy ${LUAJIT_INCLUDE_SRC} ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1/
         COMMAND ${CMAKE_COMMAND} -E copy ${LUAJIT_LIB} ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib/
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_LIST_DIR}/src/luajit.exe ${CMAKE_CURRENT_BINARY_DIR}/luajit/bin/
