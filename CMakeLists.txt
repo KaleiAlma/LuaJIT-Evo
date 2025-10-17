@@ -4,18 +4,14 @@ cmake_minimum_required(VERSION 3.26)
 project(LuaJIT)
 
 set(LUAJIT_STATIC ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib/libluajit.a)
-set(LUAJIT_SHARED ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib/libluajit.so)
 set(LUAJIT_LIB
     ${CMAKE_CURRENT_LIST_DIR}/src/libluajit.a
-    ${CMAKE_CURRENT_LIST_DIR}/src/libluajit.so
 )
 set(LUAJIT_EXE ${CMAKE_CURRENT_BINARY_DIR}/luajit/bin/luajit)
 if(WIN32)
     set(LUAJIT_STATIC ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib/lua51.lib)
-    set(LUAJIT_SHARED ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib/lua51.dll)
     set(LUAJIT_LIB
         ${CMAKE_CURRENT_LIST_DIR}/src/lua51.lib
-        ${CMAKE_CURRENT_LIST_DIR}/src/lua51.dll
     )
     set(LUAJIT_EXE ${CMAKE_CURRENT_BINARY_DIR}/luajit/bin/luajit.exe)
 endif()
@@ -35,10 +31,9 @@ list(TRANSFORM LUAJIT_HEADERS PREPEND ${CMAKE_CURRENT_BINARY_DIR}/luajit/include
 if(WIN32)
     add_custom_target(build_luajit
         BYPRODUCTS
-            ${LUAJIT_SHARED}
             ${LUAJIT_STATIC}
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/
-        COMMAND ${CMAKE_CURRENT_LIST_DIR}/src/msvcbuild.bat amalg "" "${LSTG_EXTERNAL_COMPILE_OPTS_WIN}"
+        COMMAND ${CMAKE_CURRENT_LIST_DIR}/src/msvcbuild.bat amalg static "${LSTG_COMPILE_OPTS_WIN}"
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/luajit/bin
@@ -51,11 +46,10 @@ if(WIN32)
 elseif(APPLE)
     add_custom_target(build_luajit
         BYPRODUCTS
-            ${LUAJIT_SHARED}
             ${LUAJIT_STATIC}
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/
         COMMAND export MACOSX_DEPLOYMENT_TARGET=10.15
-        COMMAND make amalg TARGET_FLAGS=--target=${CMAKE_C_COMPILER_TARGET} TARGET_CFLAGS=${LSTG_EXTERNAL_COMPILE_OPTS}
+        COMMAND make amalg TARGET_FLAGS=--target=${CMAKE_C_COMPILER_TARGET} TARGET_CFLAGS=${LSTG_COMPILE_OPTS}
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
         COMMAND make install DESTDIR=${CMAKE_CURRENT_BINARY_DIR} PREFIX=/luajit/
         VERBATIM
@@ -63,12 +57,11 @@ elseif(APPLE)
 else()
     add_custom_target(build_luajit
         BYPRODUCTS
-            ${LUAJIT_SHARED}
             ${LUAJIT_STATIC}
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/
         COMMAND make amalg
             "$<$<BOOL:${CMAKE_CROSSCOMPILING}>:TARGET_FLAGS=--target=${CMAKE_C_COMPILER_TARGET};CROSS=${CMAKE_C_COMPILER_TARGET}-;STATIC_CC=clang;DYNAMIC_CC=clang -fPIC;TARGET_LD=clang>"
-            TARGET_CFLAGS=${LSTG_EXTERNAL_COMPILE_OPTS}
+            TARGET_CFLAGS=${LSTG_COMPILE_OPTS}
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
         COMMAND make install DESTDIR=${CMAKE_CURRENT_BINARY_DIR} PREFIX=/luajit/
         COMMAND_EXPAND_LISTS
