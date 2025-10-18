@@ -49,9 +49,18 @@ elseif(APPLE)
             ${LUAJIT_STATIC}
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/
         COMMAND export MACOSX_DEPLOYMENT_TARGET=10.15
-        COMMAND make amalg TARGET_FLAGS=--target=${CMAKE_C_COMPILER_TARGET} TARGET_CFLAGS=${LSTG_COMPILE_OPTS}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
-        COMMAND make install DESTDIR=${CMAKE_CURRENT_BINARY_DIR} PREFIX=/luajit/
+        COMMAND make amalg LUAJIT_A=libluajit.amd64.a LUAJIT_T=luajit.amd64 TARGET_FLAGS=--target=x86_64-apple-darwin TARGET_CFLAGS="-march=westmere"
+        COMMAND make clean
+        COMMAND make amalg LUAJIT_A=libluajit.arm64.a LUAJIT_T=luajit.arm64 TARGET_FLAGS=--target=aarch64-apple-darwin TARGET_CFLAGS="-march=armv8.2-a"
+        COMMAND lipo -create -output libluajit.a libluajit.amd64.a libluajit.arm64.a
+        COMMAND lipo -create -output luajit luajit.amd64 luajit.arm64
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/luajit/bin
+        COMMAND ${CMAKE_COMMAND} -E copy ${LUAJIT_INCLUDE_SRC} ${CMAKE_CURRENT_BINARY_DIR}/luajit/include/luajit-2.1/
+        COMMAND ${CMAKE_COMMAND} -E copy ${LUAJIT_LIB} ${CMAKE_CURRENT_BINARY_DIR}/luajit/lib/
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_LIST_DIR}/src/luajit ${CMAKE_CURRENT_BINARY_DIR}/luajit/bin/
+        COMMAND_EXPAND_LISTS
         VERBATIM
     )
 else()
